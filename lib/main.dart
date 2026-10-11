@@ -28,15 +28,36 @@ class ProductScreen extends StatelessWidget {
       appBar: AppBar(title: const Text('Grocery Store')),
       body: LayoutBuilder(
         builder: (context, constraints) {
-          if (constraints.maxWidth > 600) {
-            return GridView.count(
-              crossAxisCount: 3,
-              children: products.map((p) => ProductCard(name: p)).toList(),
-            );
-          }
+          final isWide = constraints.maxWidth > 600;
 
-          return ListView(
-            children: products.map((p) => ProductCard(name: p)).toList(),
+          return Column(
+            children: [
+
+              Container(
+                width: double.infinity,
+                color: Colors.amber.shade100,
+                padding: const EdgeInsets.all(12),
+                child: Text(
+                  'maxWidth: ${constraints.maxWidth.toStringAsFixed(0)}  |  '
+                  'maxHeight: ${constraints.maxHeight.toStringAsFixed(0)}\n'
+                  'Layout: ${isWide ? "GRID" : "LIST"}',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+
+              Expanded(
+                child: isWide
+                  ? GridView.count(
+                      crossAxisCount: 3,
+                      children:
+                        products.map((p) => ProductCard(name: p)).toList(),
+                    )
+                  : ListView(
+                      children:
+                        products.map((p) => ProductCard(name: p)).toList(),
+                    ),
+              ),
+            ],
           );
         },
       ),
